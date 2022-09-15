@@ -1,8 +1,5 @@
 
 - Slices:
-  - Map
-  - Reduce
-  - Fold
   - SmartFilter by taking into account length strategies
 
 - Maps: TODO

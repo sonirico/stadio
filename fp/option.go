@@ -1,4 +1,4 @@
-package stadio
+package fp
 
 type (
 	Option[T any] struct {
@@ -14,7 +14,12 @@ func (o Option[T]) IsSome() bool {
 func (o Option[T]) IsNone() bool {
 	return !o.isSome
 }
-func (o Option[T]) Unwrap() T {
+
+func (o Option[T]) Unwrap() (T, bool) {
+	return o.value, o.isSome
+}
+
+func (o Option[T]) UnwrapUnsafe() T {
 	if !o.isSome {
 		panic("option is none")
 	}
