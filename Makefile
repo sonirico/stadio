@@ -42,6 +42,10 @@ test:
 bench:
 	CGO_ENABLED=1 go test ${BENCH_OPTIONS} ${SOURCE_FILES} -run ${TEST_PATTERN} -timeout=${TEST_TIMEOUT}
 
+.PHONY: docs
+docs:
+	go run readme.go 2> README.md
+
 .PHONY: setup
 setup:
 	go install golang.org/x/tools/cmd/goimports@latest

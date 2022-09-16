@@ -1,3 +1,4 @@
+// Package slices provides utilities to work with slices
 package slices
 
 import (
