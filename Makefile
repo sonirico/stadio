@@ -1,4 +1,4 @@
-SOURCE_FILES ?=./*.go
+SOURCE_FILES ?=./...
 TEST_OPTIONS := -v -failfast -race
 TEST_PATTERN ?=.
 BENCH_OPTIONS ?= -v -bench=. -benchmem

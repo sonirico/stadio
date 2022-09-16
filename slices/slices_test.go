@@ -156,6 +156,30 @@ func TestSlice_Get(t *testing.T) {
 	}
 }
 
+func TestSlice_Append(t *testing.T) {
+	numbers := Slice[int]([]int{1, 2, 3})
+	numbers.Append(4)
+	expectedLength := 4
+	if numbers.Len() != expectedLength {
+		t.Errorf("unexpected slice length, want %d, have %d",
+			expectedLength, numbers.Len())
+	}
+
+	numbers.AppendVector([]int{5, 6})
+	expectedLength = 6
+	if numbers.Len() != expectedLength {
+		t.Errorf("unexpected slice length, want %d, have %d",
+			expectedLength, numbers.Len())
+	}
+
+	numbers.Push(7)
+	expectedLength = 7
+	if numbers.Len() != expectedLength {
+		t.Errorf("unexpected slice length, want %d, have %d",
+			expectedLength, numbers.Len())
+	}
+}
+
 func TestSlice_IndexOf(t *testing.T) {
 	type testCase struct {
 		name        string
@@ -512,3 +536,424 @@ func TestCut(t *testing.T) {
 		})
 	}
 }
+
+func TestDelete(t *testing.T) {
+	type testCase struct {
+		name     string
+		payload  Slice[int]
+		idx      int
+		expected Slice[int]
+	}
+
+	tests := []testCase{
+		{
+			name:     "nil slice should be noop",
+			payload:  Slice[int]([]int{}),
+			idx:      0,
+			expected: Slice[int]([]int{}),
+		},
+		{
+			name:     "slice with one item",
+			payload:  Slice[int]([]int{1}),
+			idx:      0,
+			expected: Slice[int]([]int{}),
+		},
+		{
+			name:     "slice with one item (idx lower than 0)",
+			payload:  Slice[int]([]int{1}),
+			idx:      -1,
+			expected: Slice[int]([]int{1}),
+		},
+		{
+			name:     "slice with one item (idx greater than length)",
+			payload:  Slice[int]([]int{1}),
+			idx:      3,
+			expected: Slice[int]([]int{1}),
+		},
+		{
+			name:     "slice with two elements",
+			payload:  Slice[int]([]int{1, 2}),
+			idx:      0,
+			expected: Slice[int]([]int{2}),
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual := Delete(test.payload, test.idx)
+
+			if !test.expected.Equals(actual, testArrEq) {
+				t.Errorf("unexpected value, want %v, have %v", test.expected, actual)
+			}
+		})
+	}
+}
+
+func TestDeleteOrder(t *testing.T) {
+	type testCase struct {
+		name     string
+		payload  Slice[int]
+		idx      int
+		expected Slice[int]
+	}
+
+	tests := []testCase{
+		{
+			name:     "nil slice should be noop",
+			payload:  Slice[int]([]int{}),
+			idx:      0,
+			expected: Slice[int]([]int{}),
+		},
+		{
+			name:     "slice with one item",
+			payload:  Slice[int]([]int{1}),
+			idx:      0,
+			expected: Slice[int]([]int{}),
+		},
+		{
+			name:     "slice with one item (idx lower than 0)",
+			payload:  Slice[int]([]int{1}),
+			idx:      -1,
+			expected: Slice[int]([]int{1}),
+		},
+		{
+			name:     "slice with one item (idx greater than length)",
+			payload:  Slice[int]([]int{1}),
+			idx:      3,
+			expected: Slice[int]([]int{1}),
+		},
+		{
+			name:     "slice with two elements",
+			payload:  Slice[int]([]int{1, 2}),
+			idx:      0,
+			expected: Slice[int]([]int{2}),
+		},
+		{
+			name:     "delete keeps order",
+			payload:  Slice[int]([]int{1, 2, 3, 4}),
+			idx:      0,
+			expected: Slice[int]([]int{2, 3, 4}),
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual := DeleteOrder(test.payload, test.idx)
+
+			if !test.expected.Equals(actual, testArrEq) {
+				t.Errorf("unexpected value, want %v, have %v", test.expected, actual)
+			}
+		})
+	}
+}
+
+func TestFind(t *testing.T) {
+	type testCase struct {
+		name       string
+		payload    Slice[int]
+		expected   int
+		expectedOk bool
+	}
+
+	tests := []testCase{
+		{
+			name:       "nil slice should be noop",
+			payload:    Slice[int]([]int{}),
+			expected:   0,
+			expectedOk: false,
+		},
+		{
+			name:       "matched item is unique",
+			payload:    Slice[int]([]int{2}),
+			expected:   2,
+			expectedOk: true,
+		},
+		{
+			name:       "item in the first position",
+			payload:    Slice[int]([]int{2, 1, 1, 1, 1}),
+			expected:   2,
+			expectedOk: true,
+		},
+		{
+			name:       "item in the last position",
+			payload:    Slice[int]([]int{1, 1, 1, 1, 2}),
+			expected:   2,
+			expectedOk: true,
+		},
+		{
+			name:       "item in the middle",
+			payload:    Slice[int]([]int{1, 1, 2, 1, 1, 4}),
+			expected:   2,
+			expectedOk: true,
+		},
+	}
+
+	search := func(x int) bool {
+		return x%2 == 0
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual, ok := Find(test.payload, search)
+
+			if test.expectedOk != ok || test.expected != actual {
+				t.Errorf("unexpected value, want (%v, %t), have (%v, %t)",
+					test.expected, test.expectedOk, actual, ok)
+			}
+		})
+	}
+}
+
+func TestExtract(t *testing.T) {
+	type testCase struct {
+		name        string
+		payload     Slice[int]
+		expected    int
+		expectedArr Slice[int]
+		expectedOk  bool
+	}
+
+	tests := []testCase{
+		{
+			name:        "nil slice should be noop",
+			payload:     Slice[int]([]int{}),
+			expected:    0,
+			expectedOk:  false,
+			expectedArr: Slice[int]([]int{}),
+		},
+		{
+			name:        "matched item is unique",
+			payload:     Slice[int]([]int{2}),
+			expected:    2,
+			expectedOk:  true,
+			expectedArr: Slice[int]([]int{}),
+		},
+		{
+			name:        "item in the first position",
+			payload:     Slice[int]([]int{2, 1, 1, 1, 1}),
+			expected:    2,
+			expectedOk:  true,
+			expectedArr: Slice[int]([]int{1, 1, 1, 1}),
+		},
+		{
+			name:        "item in the last position",
+			payload:     Slice[int]([]int{1, 1, 1, 1, 2}),
+			expected:    2,
+			expectedOk:  true,
+			expectedArr: Slice[int]([]int{1, 1, 1, 1}),
+		},
+		{
+			name:        "item in the middle",
+			payload:     Slice[int]([]int{1, 1, 2, 1, 1, 4}),
+			expected:    2,
+			expectedOk:  true,
+			expectedArr: Slice[int]([]int{1, 1, 4, 1, 1}),
+		},
+	}
+
+	search := func(x int) bool {
+		return x%2 == 0
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			arr, actual, ok := Extract(test.payload, search)
+
+			if test.expectedOk != ok || test.expected != actual ||
+				!test.expectedArr.Equals(arr, testArrEq) {
+				t.Errorf("unexpected value, want (%v, %v, %t), have (%v, %v, %t)",
+					test.expectedArr, test.expected, test.expectedOk,
+					arr, actual, ok)
+			}
+		})
+	}
+}
+
+func TestInsert(t *testing.T) {
+	type testCase struct {
+		name     string
+		payload  Slice[int]
+		item     int
+		idx      int
+		expected Slice[int]
+	}
+
+	tests := []testCase{
+		{
+			name:     "nil slice should create a new one",
+			payload:  nil,
+			item:     1,
+			idx:      0,
+			expected: Slice[int]([]int{1}),
+		},
+		{
+			name:     "empty slice should insert at first position",
+			payload:  Slice[int]([]int{}),
+			item:     1,
+			idx:      0,
+			expected: Slice[int]([]int{1}),
+		},
+		{
+			name:     "insert at first position",
+			payload:  Slice[int]([]int{2}),
+			item:     1,
+			idx:      0,
+			expected: Slice[int]([]int{1, 2}),
+		},
+		{
+			name:     "insert at last position",
+			payload:  Slice[int]([]int{2}),
+			item:     1,
+			idx:      1,
+			expected: Slice[int]([]int{2, 1}),
+		},
+		{
+			name:     "insert middle position",
+			payload:  Slice[int]([]int{1, 3}),
+			item:     2,
+			idx:      1,
+			expected: Slice[int]([]int{1, 2, 3}),
+		},
+		{
+			name:     "out of bounds from left is noop",
+			payload:  Slice[int]([]int{1, 3}),
+			item:     2,
+			idx:      -1,
+			expected: Slice[int]([]int{1, 3}),
+		},
+		{
+			name:     "out of bounds from right is noop",
+			payload:  Slice[int]([]int{1, 3}),
+			item:     2,
+			idx:      3,
+			expected: Slice[int]([]int{1, 3}),
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual := Insert(test.payload, test.item, test.idx)
+
+			if !test.expected.Equals(actual, testArrEq) {
+				t.Errorf("unexpected value, want %v, have %v",
+					test.expected, actual)
+			}
+		})
+	}
+}
+
+func TestInsertVector(t *testing.T) {
+	type testCase struct {
+		name     string
+		payload  Slice[int]
+		items    []int
+		idx      int
+		expected Slice[int]
+	}
+
+	tests := []testCase{
+		{
+			name:     "nil slice should create a new one",
+			payload:  nil,
+			items:    []int{1},
+			idx:      0,
+			expected: Slice[int]([]int{1}),
+		},
+		{
+			name:     "empty slice should insert at first position",
+			payload:  Slice[int]([]int{}),
+			items:    []int{1, 2},
+			idx:      0,
+			expected: Slice[int]([]int{1, 2}),
+		},
+		{
+			name:     "insert at first position",
+			payload:  Slice[int]([]int{2}),
+			items:    []int{1, 2},
+			idx:      0,
+			expected: Slice[int]([]int{1, 2, 2}),
+		},
+		{
+			name:     "insert at last position",
+			payload:  Slice[int]([]int{2}),
+			items:    []int{3, 5},
+			idx:      1,
+			expected: Slice[int]([]int{2, 3, 5}),
+		},
+		{
+			name:     "insert middle position",
+			payload:  Slice[int]([]int{1, 3}),
+			items:    []int{2, 4},
+			idx:      1,
+			expected: Slice[int]([]int{1, 2, 4, 3}),
+		},
+		{
+			name:     "insert empty is noop",
+			payload:  Slice[int]([]int{1, 3}),
+			items:    []int{},
+			idx:      1,
+			expected: Slice[int]([]int{1, 3}),
+		},
+		{
+			name:     "out of bounds from left is noop",
+			payload:  Slice[int]([]int{1, 3}),
+			items:    []int{},
+			idx:      -1,
+			expected: Slice[int]([]int{1, 3}),
+		},
+		{
+			name:     "out of bounds from right is noop",
+			payload:  Slice[int]([]int{1, 3}),
+			items:    []int{},
+			idx:      3,
+			expected: Slice[int]([]int{1, 3}),
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual := InsertVector(test.payload, test.items, test.idx)
+
+			if !test.expected.Equals(actual, testArrEq) {
+				t.Errorf("unexpected value, want %v, have %v",
+					test.expected, actual)
+			}
+		})
+	}
+}
+
+func TestPop(t *testing.T) {
+	var (
+		payload = []int{1, 2}
+		item    int
+		ok      bool
+	)
+
+	payload, item, ok = Pop(payload)
+
+	if item != 2 || !ok {
+		t.Errorf("unexpected values, want (%d, %t), have (%d, %t)",
+			2, true,
+			item, ok,
+		)
+	}
+	payload, item, ok = Pop(payload)
+
+	if item != 1 || !ok {
+		t.Errorf("unexpected values, want (%d, %t), have (%d, %t)",
+			1, true,
+			item, ok,
+		)
+	}
+
+	payload, item, ok = Pop(payload)
+
+	if item != 0 || ok {
+		t.Errorf("unexpected values, want (%d, %t), have (%d, %t)",
+			0, false,
+			item, ok,
+		)
+	}
+}
+
+func testArrEq(x, y int) bool { return x == y }

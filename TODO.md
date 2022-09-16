@@ -1,7 +1,4 @@
 
-- Slices:
-  - SmartFilter by taking into account length strategies
-
 - Maps: TODO
 
 - FP:
