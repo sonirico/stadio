@@ -6,7 +6,8 @@ included as a standard library of the language
 
 ## Modules
 
-### slices
+### Slices
+
 Package slices provides utilities to work with slices
 
 Table of contents
@@ -397,7 +398,224 @@ func Unshift[T any](arr []T, item T) []T {
 
 
 
-<br/>### fp
+<br/>
+
+### Maps
+
+Package maps provides utilities to work with maps
+
+Table of contents
+
+- [Equals](####Equals)
+- [Filter](####Filter)
+- [FilterInPlace](####FilterInPlace)
+- [FilterMap](####FilterMap)
+- [FilterMapTuple](####FilterMapTuple)
+- [Map](####Map)
+
+#### Equals
+
+Equals returns whether 2 maps are equals in values
+
+
+<details><summary>Code</summary>
+
+```go
+
+func Equals[K comparable, V any](m1, m2 map[K]V, eq func(V, V) bool) bool {
+	if len(m1) != len(m2) {
+		return false
+	}
+
+	if m1 == nil && m2 != nil {
+		return false
+	}
+
+	if m1 != nil && m2 == nil {
+		return false
+	}
+
+	for k1, v1 := range m1 {
+		v2, ok := m2[k1]
+		if !ok {
+			return false
+		}
+
+		if !eq(v1, v2) {
+			return false
+		}
+	}
+
+	return true
+}
+```
+
+</details>
+
+#### Filter
+
+Filter discards those entries from the map that do not match predicate.
+
+
+<details><summary>Code</summary>
+
+```go
+
+func Filter[K comparable, V any](
+	m map[K]V,
+	p func(K, V) bool,
+) map[K]V {
+	if m == nil {
+		return nil
+	}
+
+	res := make(map[K]V, len(m))
+
+	for k, v := range m {
+		if p(k, v) {
+			res[k] = v
+		}
+	}
+
+	return res
+}
+```
+
+</details>
+
+#### FilterInPlace
+
+FilterInPlace deletes those entries from the map that do not match predicate.
+
+
+<details><summary>Code</summary>
+
+```go
+
+func FilterInPlace[K comparable, V any](
+	m map[K]V,
+	p func(K, V) bool,
+) map[K]V {
+	if m == nil {
+		return nil
+	}
+
+	for k, v := range m {
+		if !p(k, v) {
+			delete(m, k)
+		}
+	}
+
+	return m
+}
+```
+
+</details>
+
+#### FilterMap
+
+FilterMap both filters and maps a map. The predicate function should return a fp.Option monad:
+fp.Some to indicate the entry should be kept.
+fp.None to indicate the entry should be discarded
+
+
+<details><summary>Code</summary>
+
+```go
+
+func FilterMap[K1 comparable, V1 any, K2 comparable, V2 any](
+	m map[K1]V1,
+	p func(K1, V1) fp.Option[tuples.Tuple2[K2, V2]],
+) map[K2]V2 {
+	if m == nil {
+		return nil
+	}
+
+	res := make(map[K2]V2, len(m))
+
+	for k1, v1 := range m {
+		tpl := p(k1, v1)
+		if tpl.IsSome() {
+			v := tpl.UnwrapUnsafe()
+			res[v.V1] = v.V2
+		}
+	}
+
+	return res
+}
+```
+
+</details>
+
+#### FilterMapTuple
+
+FilterMapTuple both filters and maps the given map by receiving a predicate
+which returns mapped values, and a boolean to indicate whether that entry
+should be kept.
+
+
+<details><summary>Code</summary>
+
+```go
+
+func FilterMapTuple[K1 comparable, V1 any, K2 comparable, V2 any](
+	m map[K1]V1,
+	p func(K1, V1) (K2, V2, bool),
+) map[K2]V2 {
+	if m == nil {
+		return nil
+	}
+
+	res := make(map[K2]V2, len(m))
+
+	for k1, v1 := range m {
+		if k2, v2, ok := p(k1, v1); ok {
+			res[k2] = v2
+		}
+	}
+
+	return res
+}
+```
+
+</details>
+
+#### Map
+
+Map transforms a map into another one, with same or different types
+
+
+<details><summary>Code</summary>
+
+```go
+
+func Map[K1 comparable, V1 any, K2 comparable, V2 any](
+	m map[K1]V1,
+	p func(K1, V1) (K2, V2),
+) map[K2]V2 {
+	if m == nil {
+		return nil
+	}
+
+	res := make(map[K2]V2, len(m))
+
+	for k1, v1 := range m {
+		k2, v2 := p(k1, v1)
+		res[k2] = v2
+	}
+
+	return res
+}
+```
+
+</details>
+
+
+
+<br/>
+
+### Fp
+
 
 Table of contents
 
@@ -405,3 +623,4 @@ Table of contents
 
 
 <br/>
+

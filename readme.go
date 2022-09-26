@@ -59,8 +59,8 @@ func (m *mod) CutreSort() {
 func (m mod) String() string {
 	buf := bytes.NewBuffer(nil)
 
-	buf.WriteString("### " + m.title)
-	buf.WriteString("\n" + m.description)
+	buf.WriteString("### " + strings.ToUpper(m.title[:1]) + m.title[1:])
+	buf.WriteString("\n\n" + m.description)
 	buf.WriteString("\n")
 
 	// index
@@ -98,7 +98,7 @@ func cleanComment(c string) string {
 
 func readme() {
 	modules := []string{
-		"slices", "fp",
+		"slices", "maps", "fp",
 	}
 
 	buf := bufio.NewWriter(os.Stderr)
@@ -177,7 +177,7 @@ func readme() {
 		m.CutreSort()
 
 		_, _ = buf.WriteString(m.String())
-		_, _ = buf.WriteString("\n\n<br/>")
+		_, _ = buf.WriteString("\n\n<br/>\n\n")
 	}
 
 	_ = buf.Flush()
