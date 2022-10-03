@@ -411,7 +411,10 @@ Table of contents
 - [FilterInPlace](####FilterInPlace)
 - [FilterMap](####FilterMap)
 - [FilterMapTuple](####FilterMapTuple)
+- [Fold](####Fold)
 - [Map](####Map)
+- [Reduce](####Reduce)
+- [Slice](####Slice)
 
 #### Equals
 
@@ -580,6 +583,36 @@ func FilterMapTuple[K1 comparable, V1 any, K2 comparable, V2 any](
 
 </details>
 
+#### Fold
+
+Fold compacts the given map into a single type by taking into account the initial value
+
+
+<details><summary>Code</summary>
+
+```go
+
+func Fold[K comparable, V any, R any](
+	m map[K]V,
+	p func(R, K, V) R,
+	initial R,
+) R {
+	if m == nil {
+		return initial
+	}
+
+	r := initial
+
+	for k, v := range m {
+		r = p(r, k, v)
+	}
+
+	return r
+}
+```
+
+</details>
+
 #### Map
 
 Map transforms a map into another one, with same or different types
@@ -609,6 +642,72 @@ func Map[K1 comparable, V1 any, K2 comparable, V2 any](
 ```
 
 </details>
+
+#### Reduce
+
+Reduce compacts the given map into a single type
+
+
+<details><summary>Code</summary>
+
+```go
+
+func Reduce[K comparable, V any, R any](
+	m map[K]V,
+	p func(R, K, V) R,
+) R {
+	var r R
+
+	if m == nil {
+		return r
+	}
+
+	for k, v := range m {
+		r = p(r, k, v)
+	}
+
+	return r
+}
+```
+
+</details>
+
+#### Slice
+
+Slice converts a map into a slice
+
+
+<details><summary>Code</summary>
+
+```go
+
+func Slice[K comparable, V, R any](
+	m map[K]V,
+	p func(K, V) R,
+) slices.Slice[R] {
+	res := make([]R, len(m))
+	i := 0
+
+	for k, v := range m {
+		res[i] = p(k, v)
+		i++
+	}
+
+	return res
+}
+```
+
+</details>
+
+
+
+<br/>
+
+### Fp
+
+
+Table of contents
+
 
 
 

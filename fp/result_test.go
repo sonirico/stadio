@@ -84,20 +84,13 @@ func TestResult_UnwrapOr(t *testing.T) {
 	ok := Ok(1)
 	fail := Err[int](errors.New("cannot divide by zero"))
 
-	value, err := ok.UnwrapOr(3)
-
-	if err != nil {
-		t.Errorf("unexpected error, want nil, have %s", err.Error())
-	}
+	value := ok.UnwrapOr(3)
 
 	if value != 1 {
 		t.Errorf("unexpected result , want 1, have %d", value)
 	}
 
-	value, err = fail.UnwrapOr(1)
-	if err != nil {
-		t.Errorf("unexpected error, want nil, have %s", err.Error())
-	}
+	value = fail.UnwrapOr(1)
 
 	if value != 1 {
 		t.Errorf("unexpected result on Err, want 1, have %d", value)
@@ -108,20 +101,13 @@ func TestResult_UnwrapOrElse(t *testing.T) {
 	ok := Ok(1)
 	fail := Err[int](errors.New("cannot divide by zero"))
 
-	value, err := ok.UnwrapOrElse(func() int { return 3 })
-
-	if err != nil {
-		t.Errorf("unexpected error, want nil, have %s", err.Error())
-	}
+	value := ok.UnwrapOrElse(func() int { return 3 })
 
 	if value != 1 {
 		t.Errorf("unexpected result , want 1, have %d", value)
 	}
 
-	value, err = fail.UnwrapOrElse(func() int { return 1 })
-	if err != nil {
-		t.Errorf("unexpected error, want nil, have %s", err.Error())
-	}
+	value = fail.UnwrapOrElse(func() int { return 1 })
 
 	if value != 1 {
 		t.Errorf("unexpected result on Err, want 1, have %d", value)
@@ -132,20 +118,13 @@ func TestResult_UnwrapOrDefault(t *testing.T) {
 	ok := Ok(1)
 	fail := Err[int](errors.New("cannot divide by zero"))
 
-	value, err := ok.UnwrapOrDefault()
-
-	if err != nil {
-		t.Errorf("unexpected error, want nil, have %s", err.Error())
-	}
+	value := ok.UnwrapOrDefault()
 
 	if value != 1 {
 		t.Errorf("unexpected result , want 1, have %d", value)
 	}
 
-	value, err = fail.UnwrapOrDefault()
-	if err != nil {
-		t.Errorf("unexpected error, want nil, have %s", err.Error())
-	}
+	value = fail.UnwrapOrDefault()
 
 	if value != 0 {
 		t.Errorf("unexpected result on Err, want 0, have %d", value)

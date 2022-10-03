@@ -41,7 +41,7 @@ func TestMapTo(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			actual := Maps(test.payload, predicate)
+			actual := Map(test.payload, predicate)
 
 			if !Equals(test.expected, actual, assertMapValueEq) {
 				t.Errorf("unexpected map\nwant %v\nhave %v",
