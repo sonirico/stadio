@@ -31,29 +31,29 @@ func (r Result[T]) Unwrap() (T, error) {
 	return r.value, r.err
 }
 
-func (r Result[T]) UnwrapOr(other T) (T, error) {
+func (r Result[T]) UnwrapOr(other T) T {
 	if r.err == nil {
-		return r.value, r.err
+		return r.value
 	}
 
-	return other, nil
+	return other
 }
 
-func (r Result[T]) UnwrapOrElse(fn func() T) (T, error) {
+func (r Result[T]) UnwrapOrElse(fn func() T) T {
 	if r.err == nil {
-		return r.value, r.err
+		return r.value
 	}
 
-	return fn(), nil
+	return fn()
 }
 
-func (r Result[T]) UnwrapOrDefault() (T, error) {
+func (r Result[T]) UnwrapOrDefault() T {
 	if r.err == nil {
-		return r.value, r.err
+		return r.value
 	}
 
 	var res T
-	return res, nil
+	return res
 }
 
 func (r Result[T]) Or(other Result[T]) Result[T] {

@@ -35,8 +35,8 @@ func Equals[K comparable, V any](m1, m2 map[K]V, eq func(V, V) bool) bool {
 	return true
 }
 
-// Maps transforms a map into another one, with same or different types
-func Maps[K1 comparable, V1 any, K2 comparable, V2 any](
+// Map transforms a map into another one, with same or different types
+func Map[K1 comparable, V1 any, K2 comparable, V2 any](
 	m map[K1]V1,
 	p func(K1, V1) (K2, V2),
 ) map[K2]V2 {
