@@ -21,8 +21,8 @@ build:
 	$(info: Make: Build)
 	go build -gcflags='-m -m' examples/compiler/*.go
 
-.PHONY: format
-format:
+.PHONY: fmt
+fmt:
 	$(info: Make: Format)
 	gofmt -w ./**/*
 	goimports -w ./**/*
