@@ -61,25 +61,24 @@ func (m *Concurrent[K, V]) GetOrSet(k K, def V) (v V, ok bool) {
 	return
 }
 
-func (m *Concurrent[K, V]) Map(fn func(K, V) (K, V)) Concurrent[K, V] {
+func (m *Concurrent[K, V]) Map(fn func(K, V) (K, V)) Map[K, V] {
 	m.L.RLock()
 	defer m.L.RUnlock()
-	return Concurrent[K, V]{MapInner: m.MapInner.Map(fn)}
+	return &Concurrent[K, V]{MapInner: m.MapInner.Map(fn)}
 }
 
 func (m *Concurrent[K, V]) FilterMap(
 	fn func(K, V) fp.Option[tuples.Tuple2[K, V]],
-) Concurrent[K, V] {
+) Map[K, V] {
 	m.L.RLock()
 	defer m.L.RUnlock()
-	return Concurrent[K, V]{MapInner: m.MapInner.FilterMap(fn)}
+	return &Concurrent[K, V]{MapInner: m.MapInner.FilterMap(fn)}
 }
 
-func (m *Concurrent[K, V]) Filter(fn func(K, V) bool) Concurrent[K, V] {
+func (m *Concurrent[K, V]) Filter(fn func(K, V) bool) Map[K, V] {
 	m.L.RLock()
 	defer m.L.RUnlock()
-	return Concurrent[K, V]{MapInner: m.MapInner.Filter(fn)}
-
+	return &Concurrent[K, V]{MapInner: m.MapInner.Filter(fn)}
 }
 
 func (m *Concurrent[K, V]) Values() slices.Slice[V] {
