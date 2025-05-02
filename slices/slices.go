@@ -175,6 +175,12 @@ func Contains[T any](arr []T, predicate func(t T) bool) bool {
 	return IndexOf(arr, predicate) >= 0
 }
 
+func Includes[T comparable](arr []T, target T) bool {
+	return Contains(arr, func(t T) bool {
+		return t == target
+	})
+}
+
 func Some[T any](arr []T, predicate func(t T) bool) bool {
 	return Contains(arr, predicate)
 }

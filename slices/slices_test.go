@@ -280,6 +280,52 @@ func TestContains(t *testing.T) {
 	}
 }
 
+func TestIncludes(t *testing.T) {
+	type testCase struct {
+		name     string
+		payload  Slice[int]
+		target   int
+		expected bool
+	}
+
+	tests := []testCase{
+		{
+			name:     "nil slice should return false",
+			payload:  Slice[int]([]int{}),
+			target:   1,
+			expected: false,
+		},
+		{
+			name:     "item at the first position",
+			payload:  Slice[int]([]int{1, 2, 3}),
+			target:   1,
+			expected: true,
+		},
+		{
+			name:     "item at the last position",
+			payload:  Slice[int]([]int{1, 2, 3}),
+			target:   3,
+			expected: true,
+		},
+		{
+			name:     "item not found",
+			payload:  Slice[int]([]int{73, 30, 5}),
+			target:   3,
+			expected: false,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actualIncludes := Includes(test.payload, test.target)
+
+			if test.expected != actualIncludes {
+				t.Errorf("unexpected value, want %t, have %t", test.expected, actualIncludes)
+			}
+		})
+	}
+}
+
 func TestFilter(t *testing.T) {
 	type testCase struct {
 		name      string
