@@ -4,3 +4,4 @@
 .test
 *.prof
 *.test
+**/.claude/settings.local.json
