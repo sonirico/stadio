@@ -244,3 +244,66 @@ func TestOption_Match(t *testing.T) {
 		t.Errorf("unexpected result, want test, have %s", value)
 	}
 }
+
+func TestOptionFromTuple(t *testing.T) {
+	option := OptionFromTuple(42, true)
+	if !option.IsSome() {
+		t.Error("unexpected result, want some, have none")
+	}
+	value, ok := option.Unwrap()
+	if !ok || value != 42 {
+		t.Errorf("unexpected result, want 42, have %d", value)
+	}
+
+	option = OptionFromTuple(0, false)
+	if !option.IsNone() {
+		t.Error("unexpected result, want none, have some")
+	}
+}
+
+func TestOptionFromPtr(t *testing.T) {
+	value := 42
+	option := OptionFromPtr(&value)
+	if !option.IsSome() {
+		t.Error("unexpected result, want some, have none")
+	}
+	unwrappedValue, ok := option.Unwrap()
+	if !ok || unwrappedValue != 42 {
+		t.Errorf("unexpected result, want 42, have %d", unwrappedValue)
+	}
+
+	option = OptionFromPtr[int](nil)
+	if !option.IsNone() {
+		t.Error("unexpected result, want none, have some")
+	}
+}
+
+func TestOptionFromZero(t *testing.T) {
+	option := OptionFromZero(42)
+	if !option.IsSome() {
+		t.Error("unexpected result, want some, have none")
+	}
+	value, ok := option.Unwrap()
+	if !ok || value != 42 {
+		t.Errorf("unexpected result, want 42, have %d", value)
+	}
+
+	option = OptionFromZero(0)
+	if !option.IsNone() {
+		t.Error("unexpected result, want none, have some")
+	}
+
+	optionStr := OptionFromZero("hello")
+	if !optionStr.IsSome() {
+		t.Error("unexpected result, want some, have none")
+	}
+	strValue, ok := optionStr.Unwrap()
+	if !ok || strValue != "hello" {
+		t.Errorf("unexpected result, want 'hello', have '%s'", strValue)
+	}
+
+	optionStr = OptionFromZero("")
+	if !optionStr.IsNone() {
+		t.Error("unexpected result, want none, have some")
+	}
+}

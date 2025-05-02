@@ -112,3 +112,25 @@ func Some[T any](t T) Option[T] {
 func None[T any]() Option[T] {
 	return Option[T]{}
 }
+
+func OptionFromTuple[T any](x T, ok bool) Option[T] {
+	if ok {
+		return Some(x)
+	}
+	return None[T]()
+}
+
+func OptionFromPtr[T any](x *T) Option[T] {
+	if x == nil {
+		return None[T]()
+	}
+	return Some(*x)
+}
+
+func OptionFromZero[T comparable](x T) Option[T] {
+	var zero T
+	if x == zero {
+		return None[T]()
+	}
+	return Some(x)
+}
