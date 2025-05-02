@@ -67,7 +67,7 @@ func (m mod) String() string {
 	buf.WriteString("Table of contents\n")
 
 	for _, fn := range m.funs {
-		buf.WriteString(fmt.Sprintf("\n- [%s](####%s)", fn.name, fn.name))
+		buf.WriteString(fmt.Sprintf("\n- [%s](#%s)", fn.name, fn.name))
 	}
 
 	buf.WriteString("\n\n")

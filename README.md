@@ -14,43 +14,43 @@ searching, and manipulating elements in a type-safe manner.
 
 Table of contents
 
-- [All](####All)
-- [Any](####Any)
-- [Append](####Append)
-- [AppendVector](####AppendVector)
-- [Contains](####Contains)
-- [Cut](####Cut)
-- [Delete](####Delete)
-- [DeleteOrder](####DeleteOrder)
-- [Equals](####Equals)
-- [Extract](####Extract)
-- [ExtractIdx](####ExtractIdx)
-- [Filter](####Filter)
-- [FilterInPlace](####FilterInPlace)
-- [FilterInPlaceCopy](####FilterInPlaceCopy)
-- [FilterMap](####FilterMap)
-- [FilterMapTuple](####FilterMapTuple)
-- [Find](####Find)
-- [FindIdx](####FindIdx)
-- [Fold](####Fold)
-- [FoldSame](####FoldSame)
-- [Includes](####Includes)
-- [IndexOf](####IndexOf)
-- [Insert](####Insert)
-- [InsertVector](####InsertVector)
-- [Map](####Map)
-- [MapInPlace](####MapInPlace)
-- [Peek](####Peek)
-- [Pop](####Pop)
-- [PopFront](####PopFront)
-- [PushFront](####PushFront)
-- [Reduce](####Reduce)
-- [ReduceSame](####ReduceSame)
-- [Shift](####Shift)
-- [Some](####Some)
-- [ToMap](####ToMap)
-- [ToMapIdx](####ToMapIdx)
-- [Unshift](####Unshift)
+- [All](#All)
+- [Any](#Any)
+- [Append](#Append)
+- [AppendVector](#AppendVector)
+- [Contains](#Contains)
+- [Cut](#Cut)
+- [Delete](#Delete)
+- [DeleteOrder](#DeleteOrder)
+- [Equals](#Equals)
+- [Extract](#Extract)
+- [ExtractIdx](#ExtractIdx)
+- [Filter](#Filter)
+- [FilterInPlace](#FilterInPlace)
+- [FilterInPlaceCopy](#FilterInPlaceCopy)
+- [FilterMap](#FilterMap)
+- [FilterMapTuple](#FilterMapTuple)
+- [Find](#Find)
+- [FindIdx](#FindIdx)
+- [Fold](#Fold)
+- [FoldSame](#FoldSame)
+- [Includes](#Includes)
+- [IndexOf](#IndexOf)
+- [Insert](#Insert)
+- [InsertVector](#InsertVector)
+- [Map](#Map)
+- [MapInPlace](#MapInPlace)
+- [Peek](#Peek)
+- [Pop](#Pop)
+- [PopFront](#PopFront)
+- [PushFront](#PushFront)
+- [Reduce](#Reduce)
+- [ReduceSame](#ReduceSame)
+- [Shift](#Shift)
+- [Some](#Some)
+- [ToMap](#ToMap)
+- [ToMapIdx](#ToMapIdx)
+- [Unshift](#Unshift)
 
 #### All
 
@@ -946,15 +946,15 @@ reducing, and comparing maps.
 
 Table of contents
 
-- [Equals](####Equals)
-- [Filter](####Filter)
-- [FilterInPlace](####FilterInPlace)
-- [FilterMap](####FilterMap)
-- [FilterMapTuple](####FilterMapTuple)
-- [Fold](####Fold)
-- [Map](####Map)
-- [Reduce](####Reduce)
-- [Slice](####Slice)
+- [Equals](#Equals)
+- [Filter](#Filter)
+- [FilterInPlace](#FilterInPlace)
+- [FilterMap](#FilterMap)
+- [FilterMapTuple](#FilterMapTuple)
+- [Fold](#Fold)
+- [Map](#Map)
+- [Reduce](#Reduce)
+- [Slice](#Slice)
 
 #### Equals
 
@@ -1298,11 +1298,11 @@ It implements monadic types like Option and Result for more expressive error han
 
 Table of contents
 
-- [None](####None)
-- [OptionFromPtr](####OptionFromPtr)
-- [OptionFromTuple](####OptionFromTuple)
-- [OptionFromZero](####OptionFromZero)
-- [Some](####Some)
+- [None](#None)
+- [OptionFromPtr](#OptionFromPtr)
+- [OptionFromTuple](#OptionFromTuple)
+- [OptionFromZero](#OptionFromZero)
+- [Some](#Some)
 
 #### None
 
@@ -1412,9 +1412,9 @@ Package fp provides functional programming primitives for Go.
 
 Table of contents
 
-- [Err](####Err)
-- [Ok](####Ok)
-- [OkZero](####OkZero)
+- [Err](#Err)
+- [Ok](#Ok)
+- [OkZero](#OkZero)
 
 #### Err
 
