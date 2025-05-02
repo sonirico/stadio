@@ -44,7 +44,7 @@ bench:
 
 .PHONY: docs
 docs:
-	go run readme.go 2> README.md
+	go run readme.go 
 
 .PHONY: setup
 setup:
