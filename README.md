@@ -1,3 +1,17 @@
+# Archived Project ⚠️
+
+This repository has been **archived** and is no longer maintained or updated.
+
+If you are looking for the current version or want to continue with this functionality, please visit:
+
+👉 [github.com/sonirico/vago](https://github.com/sonirico/vago)
+
+---
+
+Thank you for your interest and understanding.
+
+--
+
 
 # Stadio
 
